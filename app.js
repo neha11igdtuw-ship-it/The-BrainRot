@@ -114,7 +114,7 @@
   function parseHash() { const [n, d] = location.hash.slice(1).split("/"); return [n || "mood", d]; }
   function route() {
     let [name, data] = parseHash();
-    if (name === "roast") { show("roast"); return; }
+    if (name === "roast" || name === "dex") { show(name); return; }
     if (!ORDER.includes(name)) name = "mood";
     if (name === "story" && data && !state.convo.length) { if (!loadShared(data)) name = "mood"; }
     if (name !== "mood" && !state.mood) name = "mood";
@@ -126,7 +126,7 @@
   const go = (n) => { location.hash = "#" + n; };
   function show(name) {
     if (name === current) return;
-    const back = current && current !== "roast" && name !== "roast" && ORDER.indexOf(name) < ORDER.indexOf(current);
+    const back = current && current !== "roast" && name !== "roast" && current !== "dex" && name !== "dex" && ORDER.indexOf(name) < ORDER.indexOf(current);
     const old = current && $("#page-" + current);
     const reveal = () => {
       $$(".page").forEach((p) => (p.hidden = true));
@@ -134,8 +134,8 @@
       p.classList.toggle("back", !!back); p.classList.remove("leave"); p.hidden = false;
       current = name;
       if (name !== "story") stopSpeak();
-      document.body.classList.toggle("on-roast", name === "roast");
-      ({ mood: renderMoods, chars: renderChars, msg: renderMsg, story: renderStory, roast: () => window.RoastBot.open() })[name]();
+      document.body.classList.toggle("on-roast", name === "roast" || name === "dex");
+      ({ mood: renderMoods, chars: renderChars, msg: renderMsg, story: renderStory, roast: () => window.RoastBot.open(), dex: () => window.Dex.open() })[name]();
       $$("#stepper li").forEach((li) => {
         const i = ORDER.indexOf(li.dataset.s), c = ORDER.indexOf(name);
         li.classList.toggle("on", i === c); li.classList.toggle("done", i < c);

@@ -18,7 +18,7 @@
 
 <header class="top">
   <a class="logo" href="#mood"><span class="logo-b">The</span> <span class="logo-r">Brainrot</span> <small>🧠</small></a>
-  <a class="rblink" href="#roast">🔥 Roast Bot</a>
+  <a class="rblink" href="#roast">🔥 Roast Bot</a><a class="rblink alt" href="#dex">📖 Dex</a>
   <ol class="stepper" id="stepper">
     <li data-s="mood"><b>1</b><span>Mood</span></li>
     <li data-s="chars"><b>2</b><span>Characters</span></li>
@@ -85,6 +85,26 @@
     </div>
   </section>
 
+  <!-- BRAINROT DEX -->
+  <section class="page" id="page-dex" hidden>
+    <div class="ph"><span class="kicker">Brainrot Dex</span><h1>Collect the <em>creatures</em> 🇮🇹</h1><p>Har character ka apna jingle aur Italian-accent catchphrase. Play dabao!</p></div>
+    <div class="dex">
+      <div class="dex-tabs" id="dexTabs"></div>
+      <div class="dex-card" id="dexCard">
+        <div class="dex-art" id="dexArt"></div>
+        <h2 id="dexName"></h2>
+        <p class="dex-say" id="dexSay"></p>
+        <p class="dex-lore" id="dexLore"></p>
+        <div class="dex-move" id="dexMove"></div>
+        <div class="dex-stats" id="dexStats"></div>
+        <label class="dex-voice">🇮🇹 Voice <select id="dexVoice" aria-label="Italian voice"></select></label>
+        <button class="dex-play" id="dexPlay" type="button" aria-label="Play jingle">▶</button>
+        <div class="dex-nav"><button class="btn small" id="dexPrev" type="button">← Prev</button><span id="dexSeen"></span><button class="btn small" id="dexRand" type="button">🎲</button><button class="btn small" id="dexNext" type="button">Next →</button></div>
+      </div>
+      <p class="dex-note">Original emoji art and synthesized jingles. Fan-made parody, not affiliated with any original creator.</p>
+    </div>
+  </section>
+
   <!-- ROAST BOT -->
   <section class="page" id="page-roast" hidden>
     <div class="ph"><span class="kicker">AI Roast Bot</span><h1>Query daalo, <em>roast</em> lo 🔥</h1><p>Jo bhi likhoge, bot usi pe tumhe roast karega. Sirf mazaak ke liye.</p></div>
@@ -137,6 +157,8 @@
 <div id="toast" class="toast" role="status"></div>
 <script src="data.js"></script>
 <script src="extras.js"></script>
+<script src="music.js"></script>
+<script src="dex.js"></script>
 <script src="roast.js"></script>
 <script src="app.js"></script>
 <script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>

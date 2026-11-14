@@ -4,7 +4,7 @@ const roast = require("./api/roast.js");
 const ROOT = __dirname, PORT = process.env.PORT || 3000;
 const FILES = {
   "/": "index.html", "/index.html": "index.html", "/style.css": "style.css", "/data.js": "data.js", "/app.js": "app.js",
-  "/roast.js": "roast.js", "/extras.js": "extras.js", "/sw.js": "sw.js", "/icon.svg": "icon.svg", "/manifest.webmanifest": "manifest.webmanifest"
+  "/roast.js": "roast.js", "/extras.js": "extras.js", "/music.js": "music.js", "/dex.js": "dex.js", "/sw.js": "sw.js", "/icon.svg": "icon.svg", "/manifest.webmanifest": "manifest.webmanifest"
 };
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".svg": "image/svg+xml", ".webmanifest": "application/manifest+json" };
 

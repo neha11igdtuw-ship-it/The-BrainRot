@@ -46,6 +46,8 @@ There is also a **Roast Bot**: type any query and it roasts you for it.
 - Procedurally drawn SVG avatars (no image files)
 - Text-to-speech with a per-character voice profile (Web Speech API, `en-IN` / `hi-IN`)
 - Synthesized sound effects (WebAudio): pop, boom, bruh, dun-dun-dun, ding, laugh
+- 📖 **Brainrot Dex:** 13 collectible creature cards with stats, a synthesized jingle and an Italian-accent catchphrase
+- 🎶 **Musica:** original Italian-brainrot tarantella loop (mandolin, accordion, tambourine), live-synthesized, with Italian "Mamma mia!" shouts on the landing page
 
 **Brainrot mechanics**
 - 📊 **Brainrot Meter:** animated gauge and rank, from "NPC Energy" to "Terminally Cooked"
@@ -118,6 +120,8 @@ Vanilla **HTML, CSS and JavaScript**. No framework, no build step, no backend.
 ├── style.css    # comic / neo-brutalist theme, 3D hero, chat UI
 ├── app.js       # router, story engine, comic book, voice, share
 ├── data.js      # moods, characters, punchlines, slang, roasts
+├── dex.js       # Brainrot Dex: collectible character cards
+├── music.js     # original Italian-brainrot tarantella loop (WebAudio)
 ├── roast.js     # Roast Bot (offline engine + AI providers)
 ├── server.js    # Node server for Render (static files + /api)
 ├── api/roast.js # AI proxy that keeps the API key secret
