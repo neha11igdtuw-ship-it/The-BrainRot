@@ -8,7 +8,7 @@
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![No build](https://img.shields.io/badge/build-none-2ea66b)
-![No backend](https://img.shields.io/badge/backend-none-2ea66b)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 
 **[Live demo](https://the-brainrot.onrender.com)** · **[Run locally](#-run-locally)** · **[Roast Bot](#-roast-bot)**
 
@@ -181,4 +181,4 @@ Ideas, new punchlines and bug reports are welcome. Open an issue or a pull reque
 
 ## 📄 License
 
-Choose a license (for example [MIT](https://choosealicense.com/licenses/mit/)) and add a `LICENSE` file before publishing.
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Neha.
