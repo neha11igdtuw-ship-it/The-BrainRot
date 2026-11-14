@@ -14,6 +14,12 @@
 
 </div>
 
+<div align="center">
+
+![The Brainrot demo](docs/preview.gif)
+
+</div>
+
 ---
 
 ## ✨ What is it?
