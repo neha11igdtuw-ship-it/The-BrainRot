@@ -1,5 +1,5 @@
 // Offline shell. Never caches /api/ calls.
-const V = "brainrot-v4", FILES = ["./", "index.html", "style.css", "data.js", "app.js", "roast.js", "extras.js", "music.js", "dex.js", "icon.svg", "manifest.webmanifest"];
+const V = "brainrot-v5", FILES = ["./", "index.html", "style.css", "data.js", "app.js", "roast.js", "extras.js", "music.js", "dex.js", "icon.svg", "manifest.webmanifest"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", (e) => {

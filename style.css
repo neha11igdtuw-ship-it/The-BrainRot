@@ -422,3 +422,14 @@ body{position:relative}
 .dex-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;font-size:.78rem;font-weight:700}
 .dex-note{text-align:center;font-size:.72rem;color:var(--muted);margin:14px 0 0}
 .dex-voice{display:flex;gap:8px;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;margin:0 0 12px}.dex-voice select{font:inherit;font-size:.78rem;padding:4px 8px;border:2px solid var(--ink);border-radius:10px;background:#fff;max-width:60%}
+
+/* Dex lyrics */
+.dex-lytog{font:inherit;font-weight:800;font-size:.82rem;padding:6px 14px;margin:0 0 10px;border:2px solid var(--ink);border-radius:999px;background:#fff;cursor:pointer}
+.dex-lytog.on{background:var(--dc,#ffe36e)}
+.dex-lywrap{margin:0 0 12px;text-align:left}
+.dex-lywrap[hidden]{display:none}
+.dex-lyrics p{margin:0 0 8px;padding:6px 10px;border-left:4px solid transparent;border-radius:8px;transition:background .2s,border-color .2s,transform .2s}
+.dex-lyrics b{display:block;font-size:.95rem}
+.dex-lyrics small{display:block;font-size:.76rem;color:#0008;font-style:italic}
+.dex-lyrics p.hot{background:var(--dc,#ffe36e);border-color:var(--ink);transform:scale(1.02)}
+.dex-lywrap .btn{display:block;margin:6px auto 0}

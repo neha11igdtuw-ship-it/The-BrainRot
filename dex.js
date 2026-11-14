@@ -19,7 +19,23 @@
     { n: "Bombombini Gusini", e: ["🪿", "✈️"], c: "#f0f0f0", say: "Bombombini gusini!", lore: "A goose in a flight suit. Honks first, lands later, never takes feedback.", move: "Honk Raid", s: [66, 35, 90], j: { w: "sawtooth", r: 60, m: [4,7,6,4,2,0] } },
     { n: "Burbaloni Luliloli", e: ["🥥", "🏝️"], c: "#ffd29a", say: "Burbaloni luliloli!", lore: "A coconut that thinks it is an island. Calm, creamy and extremely hard to crack.", move: "Island Mode", s: [82, 75, 30], j: { w: "sine", r: 56, m: [2,4,5,7,5,4] } }
   ];
-  let cur = 0, ac, seen = new Set();
+  // original funny Italian lyrics, [italian, hinglish] per line, same order as D
+  const LY = [
+    [["Squalo con le scarpe, corre come il vento,", "Shark joote pehne, hawa ki tarah daudta hai,"], ["Ha perso la gara, ma è sempre contento!", "Race haar gaya, par khush phir bhi hai!"], ["Tralalero tralala, che bella andatura,", "Tralalero tralala, kya style hai chaal ka,"], ["Nuota sul cemento, che avventura!", "Cement par tairta hai, kya adventure!"]],
+    [["Bombardino vola, che grande paura,", "Bombardino udta hai, kitna darr lagta hai,"], ["Un coccodrillo col motore, che tortura!", "Engine wala magarmach, kya torture hai!"], ["Snap! Snap! Dal cielo scende il gran boato,", "Snap! Snap! Aasman se dhamaka aata hai,"], ["Chiede scusa a tutti... ma non ha mai pagato!", "Sabse maafi maangta hai... par paise kabhi nahi diye!"]],
+    [["Sono le tre di notte, che bel tamburo,", "Raat ke teen baje, kya mast dhol hai,"], ["Il vicino si sveglia e dice: «Che futuro!»", "Padosi jaagta hai aur kehta hai: «Kya future hai!»"], ["Tung, tung, tung, tung, tung, tung, sahur,", "Tung, tung, tung, tung, tung, tung, sahur,"], ["Il legno batte forte, nessuno è più sicuro!", "Lakdi zor se bajti hai, ab koi safe nahi!"]],
+    [["Cappello e occhiali, che stile da bandito,", "Topi aur chashma, daku wala style,"], ["Il castoro ha un piano, ed è già riuscito!", "Beaver ka plan hai, aur kaam ho bhi gaya!"], ["Ha rubato la diga? No, solo un panino,", "Dam chura liya? Nahi, bas ek sandwich,"], ["Bobritto bandito, che grande bambino!", "Bobritto bandito, kitna bada bachcha hai!"]],
+    [["Brr brr patapim, un albero col piede,", "Brr brr patapim, paer wala ped,"], ["Cammina pianissimo, nessuno ci crede!", "Bahut dheere chalta hai, koi maanta nahi!"], ["Ha le radici stanche e tante opinioni,", "Jadein thaki hain aur raayein bahut saari,"], ["Ti dà l'ombra gratis... ma con le lezioni!", "Chhaon free deta hai... par lecture ke saath!"]],
+    [["Trippi troppi, è un gatto o un gambero?", "Trippi troppi, billi hai ya jhinga?"], ["Nessuno lo sa, è un vero mistero!", "Koi nahi jaanta, ye asli mystery hai!"], ["Miao-miao, croc-croc, che confusione,", "Meow-meow, croc-croc, kitna confusion,"], ["Finisce nel piatto con grande passione!", "Plate mein pahunch jata hai poore junoon se!"]],
+    [["Lirilì larilà, un elefante nel deserto,", "Lirilì larilà, registan mein haathi,"], ["Con un cactus in testa, sempre un po' incerto!", "Sar par cactus, hamesha thoda confused!"], ["Controlla il tempo, ma arriva in ritardo,", "Time control karta hai, par late aata hai,"], ["«Sono puntuale!» dice con lo sguardo!", "«Main on time hoon!» aankhon se kehta hai!"]],
+    [["Chimpanzini bananini, che gran confusione,", "Chimpanzini bananini, kya bada confusion,"], ["Scivola sulla buccia e fa un'acrobazione!", "Chhilke par phisalta hai aur acrobatics kar deta hai!"], ["Oh-oh-oh, ah-ah-ah, tanto potassio dentro,", "Oh-oh-oh, ah-ah-ah, andar bahut potassium,"], ["Ride come un matto, e cade sempre al centro!", "Pagal ki tarah hansta hai, aur hamesha beech mein girta hai!"]],
+    [["Capuchino assassino, ninja del mattino,", "Capuchino assassino, subah ka ninja,"], ["Colpisce con la schiuma, sveglia anche il vicino!", "Jhaag se vaar karta hai, padosi ko bhi jagata hai!"], ["Un sorso, due sorsi, il cuore va a mille,", "Ek ghoont, do ghoont, dil hazaar ki speed par,"], ["Il sonno è sconfitto, restano le scintille!", "Neend haar gayi, bas chingariyan bachi hain!"]],
+    [["Frigo Camelo, un frigorifero sulla gobba,", "Frigo Camelo, kooban par fridge,"], ["Fresco nel deserto, mentre l'altro sbuffa e sgobba!", "Registan mein thanda, doosra hanfta aur mehnat karta hai!"], ["Alle tre di notte c'è sempre un panino,", "Raat ke teen baje hamesha ek sandwich hai,"], ["Il cammello è amico di ogni spuntino!", "Oont har snack ka dost hai!"]],
+    [["Boneca ambalabu, una rana sulle ruote,", "Boneca ambalabu, pahiyon par mendhak,"], ["Salta e rotola forte, tra le strade vuote!", "Kudti aur ludhakti hai, khali sadkon par!"], ["Non ha i freni, ma ha tanto coraggio,", "Brake nahi hain, par himmat bahut hai,"], ["Ribbit, ribbit, che bel viaggio!", "Ribbit, ribbit, kya mast safar!"]],
+    [["Bombombini gusini, un'oca col motore,", "Bombombini gusini, engine wali batakh,"], ["Fa honk e atterra con tanto rumore!", "Honk karti hai aur shor ke saath utarti hai!"], ["Le critiche? «Honk!» non le vuole ascoltare,", "Criticism? «Honk!» sunna hi nahi chahti,"], ["Dice: «Non mi interessa, io torno a volare!»", "Kehti hai: «Mujhe farak nahi, main phir ud rahi hoon!»"]],
+    [["Burbaloni luliloli, noce di cocco un po' strana,", "Burbaloni luliloli, thoda ajeeb nariyal,"], ["Si crede un'isola, in vacanza ogni settimana!", "Khud ko island samajhta hai, har hafte vacation par!"], ["Dentro è dolce e cremosa, fuori è dura da aprire,", "Andar meetha aur malaai jaisa, bahar se kholna mushkil,"], ["Per romperla ci vuole un martello e un sorriso da offrire!", "Todne ke liye hathoda aur muskurahat chahiye!"]]
+  ];
+  let cur = 0, ac, seen = new Set(), singing = false;
   try { seen = new Set(JSON.parse(localStorage.getItem("br_dex") || "[]")); } catch (e) {}
   const saveSeen = () => { try { localStorage.setItem("br_dex", JSON.stringify([...seen])); } catch (e) {} };
   /* ---------- Italian voice picker (shared with music.js) ---------- */
@@ -101,6 +117,33 @@
   }
   function speak(t) { return say(t, { rate: 0.9, pitch: 1.18 }); }
 
+  function renderLyrics() {
+    const L = LY[cur] || [];
+    $("#dexLyrics").innerHTML = L.map(([it, hi], k) => '<p data-k="' + k + '"><b>' + esc(it) + "</b><small>" + esc(hi) + "</small></p>").join("");
+  }
+  function stopSing() {
+    singing = false; if (window.speechSynthesis) speechSynthesis.cancel();
+    $("#dexLyrics").querySelectorAll("p").forEach((p) => p.classList.remove("hot"));
+    const b = $("#dexSing"); if (b) { b.classList.remove("on"); b.textContent = "🎤 Sing"; }
+  }
+  function sing() {
+    const ss = window.speechSynthesis; if (!ss) return;
+    if (singing) { stopSing(); return; }
+    const L = LY[cur] || []; if (!L.length) return;
+    ss.cancel(); singing = true;
+    const b = $("#dexSing"); b.classList.add("on"); b.textContent = "⏹ Stop";
+    const ps = $("#dexLyrics").querySelectorAll("p"), v = bestVoice();
+    L.forEach(([it], k) => {
+      const u = new SpeechSynthesisUtterance(it);
+      u.lang = "it-IT"; if (v) u.voice = v; u.rate = 0.88; u.pitch = 1.18; u.volume = 1;
+      u.onstart = () => { ps.forEach((p, j) => p.classList.toggle("hot", j === k)); };
+      u.onend = () => { if (k === L.length - 1) stopSing(); };
+      u.onerror = () => { if (k === L.length - 1) stopSing(); };
+      ss.speak(u);
+    });
+    try { jingle(D[cur], cur); } catch (e) {}
+  }
+
   function show(i, dir) {
     cur = (i + D.length) % D.length;
     const d = D[cur]; seen.add(d.n); saveSeen();
@@ -117,6 +160,7 @@
     requestAnimationFrame(() => requestAnimationFrame(() => $("#dexStats").querySelectorAll("b").forEach((b) => (b.style.width = b.dataset.w + "%"))));
     $("#dexSeen").textContent = "Collected " + seen.size + "/" + D.length;
     $("#dexPlay").classList.remove("on");
+    stopSing(); renderLyrics();
   }
 
   let built = false;
@@ -133,6 +177,8 @@
     const fill = () => { const L = itVoices(); sel.innerHTML = ""; if (!L.length) { sel.innerHTML = "<option>No Italian voice found</option>"; return; } const b = bestVoice(); L.forEach((v) => { const o = document.createElement("option"); o.value = v.name; o.textContent = v.name.replace(/\s*\(.*\)/, ""); if (b && v.name === b.name) o.selected = true; sel.appendChild(o); }); };
     fill(); if (window.speechSynthesis) speechSynthesis.onvoiceschanged = fill;
     sel.onchange = () => { try { localStorage.setItem("br_itvoice", sel.value); } catch (e) {} speak(D[cur].say); };
+    $("#dexSing").onclick = sing;
+    $("#dexLyTog").onclick = () => { const w = $("#dexLyWrap"), open = w.hidden; w.hidden = !open; $("#dexLyTog").classList.toggle("on", open); $("#dexLyTog").setAttribute("aria-expanded", open); if (!open) stopSing(); };
     $("#dexPrev").onclick = () => show(cur - 1);
     $("#dexNext").onclick = () => show(cur + 1);
     $("#dexRand").onclick = () => show(Math.floor(Math.random() * D.length));
