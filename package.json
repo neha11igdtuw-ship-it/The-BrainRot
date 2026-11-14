@@ -1,0 +1,9 @@
+{
+  "name": "the-brainrot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hinglish comic conversations and an AI Roast Bot.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

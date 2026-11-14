@@ -6,7 +6,7 @@
   const ORDER = ["mood", "chars", "msg", "story"];
   const YOU = { id: "you", name: "Tum", g: "m", tag: "" };
   const ROT = ["Mild", "Medium", "Cooked"];
-  const state = { mood: null, chars: [], text: "", convo: [], baseLen: 0, voice: true, sfx: true, rot: 1, mode: "story", score: 0 };
+  const state = { aiLines: null, mood: null, chars: [], text: "", convo: [], baseLen: 0, voice: true, sfx: true, rot: 1, mode: "story", score: 0 };
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((p) => p[1]);
   const rp = (a) => a[Math.floor(Math.random() * a.length)];
@@ -23,6 +23,21 @@
     get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
+
+  const Ach = { event: (n, d) => { try { window.Ach && window.Ach.event(n, d); } catch (e) {} } };
+  let aiServer = false;
+  fetch("/api/roast", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && j.ok) { aiServer = true; const b = $("#aiModeBtn"); if (b) b.hidden = false; } }).catch(() => {});
+  /* custom characters (persisted) */
+  const NATURES = {
+    dramatic: ["Dramebaaz", ["Mera toh dil hi toot gaya!", "Ye toh poori duniya ki saazish hai!", "Main abhi ro dunga, camera lagao."]],
+    lazy: ["Aalsi", ["Kal karenge, aaj mood nahi hai.", "Bhai 5 minute aur, phir pakka.", "Itna kaun sochta hai, so jaate hain."]],
+    topper: ["Topper", ["Maine toh syllabus 3 baar khatam kiya.", "Technically ye galat approach hai.", "Notes chahiye toh bol, 50 rupaye per page."]],
+    savage: ["Savage", ["Itna aura leke aaya hai ya EMI pe?", "Roast karun? Tension mat le, free hai.", "Tu kya bol raha hai, mujhe toh buffering lagi."]],
+    foodie: ["Foodie", ["Pehle khana, phir drama.", "Samosa ho toh main sab maaf kar dun.", "Ye baat chai pe karte hain, bhookh lagi hai."]],
+    gossip: ["Gossip Queen/King", ["Suna tune? Poori colony ko pata hai!", "Main kisi ko nahi bataunga, bas 10 logo ko.", "Mere paas breaking news hai, baith."]]
+  };
+  const CUSTOM_IDS = [];
+  (function restoreCustom() { (JSON.parse(localStorage.getItem("br_custom") || "[]")).forEach((c) => { if (c && c.id && c.sig) { CHARS[c.id] = c; CUSTOM_IDS.push(c.id); } }); })();
 
   /* ================= SFX (WebAudio, no assets needed) ================= */
   let ac;
@@ -225,7 +240,7 @@
     const m = state.mood;
     $("#charsSub").textContent = `${m.emoji} ${m.name} — 2 se 4 characters chuno`;
     const box = $("#chars"); box.innerHTML = "";
-    m.chars.forEach((id, i) => {
+    m.chars.concat(CUSTOM_IDS).forEach((id, i) => {
       const c = CHARS[id], d = document.createElement("button");
       d.className = "char" + (state.chars.includes(id) ? " on" : ""); d.style.setProperty("--i", i);
       d.innerHTML = `<span class="tick">✓</span>${avatar(c)}<h4>${esc(c.name)}</h4><small>${esc(c.tag)}</small>`;
@@ -242,6 +257,17 @@
   }
   function updateCount() { $("#count").textContent = `${state.chars.length}/4`; $("#toMsg").disabled = state.chars.length < 2; }
   $("#toMsg").onclick = () => go("msg");
+  $("#addCustom").onclick = () => { const b = $("#customBox"); b.hidden = !b.hidden; if (!b.hidden) $("#cName").focus(); };
+  $("#cSave").onclick = () => {
+    const name = $("#cName").value.trim().slice(0, 18);
+    if (!name) return toast("Naam to likho 😅");
+    const [label, sig] = NATURES[$("#cNature").value];
+    const c = { id: "custom_" + Date.now().toString(36), name, tag: label, g: $("#cGender").value, sig };
+    CHARS[c.id] = c; CUSTOM_IDS.push(c.id);
+    try { localStorage.setItem("br_custom", JSON.stringify(CUSTOM_IDS.map((id) => CHARS[id]))); } catch (e) {}
+    if (state.chars.length < 4) state.chars.push(c.id);
+    $("#cName").value = ""; $("#customBox").hidden = true; renderChars(); toast(name + " aa gaya! 🎉"); Ach.event("custom");
+  };
   $("#surprise").onclick = () => { state.chars = shuffle(state.mood.chars).slice(0, 3); renderChars(); };
 
   /* ================= step 3: message, mode, rot ================= */
@@ -258,7 +284,7 @@
     $("#input").placeholder = state.mode === "roast" ? "Apni line likho — characters roast karenge 🔥" : "Apni situation type karo… e.g. Mera friend har baar late aata hai";
     $("#rot").value = state.rot; $("#rotName").textContent = ROT[state.rot];
     $$("#modes button").forEach((b) => b.classList.toggle("on", b.dataset.mode === state.mode));
-    $("#start").textContent = state.mode === "roast" ? "🔥 Roast battle shuru karo" : "📖 Comic shuru karo";
+    $("#start").textContent = state.mode === "roast" ? "🔥 Roast battle shuru karo" : state.mode === "ai" ? "✨ AI comic likho" : "📖 Comic shuru karo";
   }
   $("#rot").oninput = (e) => { state.rot = +e.target.value; $("#rotName").textContent = ROT[state.rot]; SFX.pop(); };
   $$("#modes button").forEach((b) => (b.onclick = () => { state.mode = b.dataset.mode; SFX.pop(); renderMsg(); }));
@@ -273,6 +299,7 @@
   const aura = () => rp(EX.AURA);
   function buildConvo() {
     const m = state.mood, chars = state.chars.map((id) => CHARS[id]), text = state.text.trim();
+    if (state.mode === "ai" && state.aiLines) { const l = state.aiLines; state.aiLines = null; return l; }
     const order = shuffle(chars), lines = [];
     const short = (t) => (t.length > 38 ? t.slice(0, 38) + "…" : t);
     if (state.mode === "roast") {
@@ -303,16 +330,36 @@
 
   function newStory() {
     state.convo = buildConvo(); state.baseLen = state.convo.length; state.score = computeScore(state.text, state.convo);
+    Ach.event("story", { score: state.score, mood: state.mood.id, mode: state.mode, rot: state.rot });
   }
-  $("#start").onclick = () => {
-    if (busy) return; busy = true;
-    state.text = $("#input").value; newStory(); bumpStreak();
+  async function fetchAIComic() {
+    const r = await fetch("/api/roast", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ mode: "comic", mood: state.mood.name, rot: state.rot, text: state.text.trim(), chars: state.chars.map((id) => ({ name: CHARS[id].name, tag: CHARS[id].tag })) }) });
+    if (!r.ok) throw new Error("http-" + r.status);
+    const j = await r.json(), cs = state.chars.map((id) => CHARS[id]), out = [];
+    if (state.text.trim()) out.push({ char: YOU, text: state.text.trim(), user: true });
+    (j.lines || []).forEach((l) => out.push({ char: cs[l.c] || cs[0], text: l.t, aura: aura() }));
+    if (out.length < 3) throw new Error("short");
+    return out;
+  }
+  function runCurtain() {
     $("#curEmoji").textContent = state.mood.emoji;
     $("#curLine").textContent = state.mode === "roast" ? "Roast battle! Aura daav pe lag chuka hai 🔥" : state.mood.tagline;
     const cu = $("#curtain"); cu.classList.remove("open"); cu.classList.add("show"); SFX.dundun();
     setTimeout(() => go("story"), 2000);
     setTimeout(() => cu.classList.add("open"), 2150);
     setTimeout(() => { cu.classList.remove("show", "open"); busy = false; }, 3100);
+  }
+  $("#start").onclick = async () => {
+    if (busy) return; busy = true;
+    state.text = $("#input").value; state.aiLines = null;
+    if (state.mode === "ai") {
+      const btn = $("#start"), old = btn.textContent; btn.disabled = true; btn.textContent = "✍️ AI likh raha hai…";
+      try { state.aiLines = await fetchAIComic(); Ach.event("ai"); }
+      catch (e) { state.aiLines = null; toast("AI nahi mila — normal comic chala raha hoon"); }
+      btn.disabled = false; btn.textContent = old;
+    }
+    newStory(); bumpStreak(); runCurtain();
   };
 
   /* ================= comic book ================= */
@@ -415,6 +462,7 @@
 
   /* ----- bonus round (branching) ----- */
   function chooseBonus(type) {
+    Ach.event("bonus");
     if (bonusDone) return; bonusDone = true;
     const chars = state.chars.map((id) => CHARS[id]), last = state.convo[state.convo.length - 1].char;
     const pool = chars.filter((c) => c.id !== last.id), rc = pool.length ? rp(pool) : chars[0];
@@ -539,7 +587,7 @@
     } catch { return false; }
   }
   async function copyText() { try { await navigator.clipboard.writeText(asText()); toast("Copied! 📋"); } catch { toast("Copy nahi hua"); } }
-  async function copyLink() { try { await navigator.clipboard.writeText(shareURL()); toast("Link copied! Dost ko bhejo 🔗"); } catch { toast("Copy nahi hua"); } }
+  async function copyLink() { Ach.event("share"); try { await navigator.clipboard.writeText(shareURL()); toast("Link copied! Dost ko bhejo 🔗"); } catch { toast("Copy nahi hua"); } }
   async function share() {
     if (navigator.share) { try { await navigator.share({ title: "The Brainrot", text: `${state.mood.name} — Brainrot ${state.score}%`, url: shareURL() }); } catch {} } else copyLink();
   }
@@ -553,6 +601,7 @@
     });
   }
   async function exportCard() {
+    Ach.event("share");
     toast("Card ban raha hai… 🖼");
     try { await loadH2C(); } catch { return toast("Card library load nahi hui (internet check karo)"); }
     const board = auraTotals(), lines = state.convo.slice(0, 5);
@@ -577,7 +626,7 @@
   /* ================= keyboard + easter eggs ================= */
   function cooked(on) {
     document.body.classList.toggle("cooked", on);
-    toast(on ? "COOKED MODE ON 💀 aura = -∞" : "Cooked mode off 🧊"); if (on) { SFX.boom(); confetti(); }
+    toast(on ? "COOKED MODE ON 💀 aura = -∞" : "Cooked mode off 🧊"); if (on) Ach.event("cooked"); if (on) { SFX.boom(); confetti(); }
   }
   const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
   let kpos = 0;

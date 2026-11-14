@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#ff7a45">
 </head>
 <body>
 <div class="bgshapes" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -43,16 +46,24 @@
     <div class="marq" aria-hidden="true"><div><span>SKIBIDI ✦ AURA +500 ✦ OHIO ✦ RIZZ ✦ NO CAP ✦ 6-7 ✦ COOKED ✦ SIGMA ✦ GYATT ✦ FANUM TAX ✦ </span><span>SKIBIDI ✦ AURA +500 ✦ OHIO ✦ RIZZ ✦ NO CAP ✦ 6-7 ✦ COOKED ✦ SIGMA ✦ GYATT ✦ FANUM TAX ✦ </span></div></div>
     <div class="ph" id="moodlist"><span class="kicker">Step 1 of 3</span><h1>Aaj ka <em>mood</em> kya hai?</h1><p>Ek mood chuno, baaki flow apne aap aage badhega.</p></div>
     <div id="daily" class="daily"></div>
+    <div class="statsrow"><button class="btn small" id="openBadges" type="button">🏅 Badges</button><button class="btn small" id="openWrapped" type="button">🎁 My Wrapped</button></div>
     <div id="moods" class="moods"></div>
   </section>
 
   <!-- STEP 2 -->
   <section class="page" id="page-chars" hidden>
     <div class="ph"><span class="kicker">Step 2 of 3</span><h1>Kaun kaun <em>aayega</em>?</h1><p id="charsSub"></p></div>
+    <div class="custombox" id="customBox" hidden>
+      <input id="cName" maxlength="18" placeholder="Character ka naam" autocomplete="off">
+      <select id="cNature"><option value="dramatic">🎭 Dramebaaz</option><option value="lazy">😴 Aalsi</option><option value="topper">🤓 Topper</option><option value="savage">😈 Savage</option><option value="foodie">🍕 Foodie</option><option value="gossip">🗣 Gossip</option></select>
+      <select id="cGender"><option value="m">Boy</option><option value="f">Girl</option></select>
+      <button class="btn small primary" id="cSave" type="button">Add</button>
+    </div>
     <div id="chars" class="chars"></div>
     <div class="bar">
       <button class="btn ghost" data-go="mood">← Back</button>
       <button class="btn ghost" id="surprise">🎲 Surprise me</button>
+      <button class="btn ghost" id="addCustom">➕ Apna character</button>
       <span class="count" id="count">0/4</span>
       <button class="btn primary" id="toMsg" disabled>Next →</button>
     </div>
@@ -63,7 +74,7 @@
     <div class="ph"><span class="kicker">Step 3 of 3</span><h1>Apni <em>situation</em> batao</h1><p>Optional hai. Khaali chhodo toh hum ek surprise story sunayenge.</p></div>
     <div class="msgbox">
       <div class="selchars" id="selchars"></div>
-      <div class="modes" id="modes"><button data-mode="story" class="on">📖 Story</button><button data-mode="roast">🔥 Roast Battle</button></div>
+      <div class="modes" id="modes"><button data-mode="story" class="on">📖 Story</button><button data-mode="roast">🔥 Roast Battle</button><button data-mode="ai" id="aiModeBtn" hidden>✨ AI Comic</button></div>
       <div class="rot"><label>🧠 Rot level: <b id="rotName">Medium</b></label><input type="range" id="rot" min="0" max="2" value="1" step="1"><div class="rotlab"><span>Mild</span><span>Medium</span><span>Cooked</span></div></div>
       <textarea id="input" rows="3" maxlength="140" placeholder="Apni situation type karo… e.g. Mera friend har baar late aata hai"></textarea>
       <div class="chips" id="chips"></div>
@@ -78,6 +89,7 @@
   <section class="page" id="page-roast" hidden>
     <div class="ph"><span class="kicker">AI Roast Bot</span><h1>Query daalo, <em>roast</em> lo 🔥</h1><p>Jo bhi likhoge, bot usi pe tumhe roast karega. Sirf mazaak ke liye.</p></div>
     <div class="rb">
+      <div class="rb-modes" id="rbModes"><button type="button" data-m="me" class="on">🔥 Roast me</button><button type="button" data-m="friend">🎯 Roast a friend</button><button type="button" data-m="judge">🏆 Roast the bot</button></div>
       <div class="rb-personas" id="rbPersonas"></div>
       <div class="rb-top">
         <div class="rot"><label>🧠 Roast level: <b id="rbLevelName">Medium</b></label><input type="range" id="rbLevel" min="0" max="2" value="1" step="1"></div>
@@ -92,6 +104,7 @@
       </div>
       <div class="rb-log" id="rbLog" aria-live="polite"></div>
       <div class="chips" id="rbChips"></div>
+      <div class="rb-friend" id="rbFriend" hidden><input id="rbFName" maxlength="30" placeholder="Dost ka naam" autocomplete="off"></div>
       <form class="rb-form" id="rbForm"><textarea id="rbInput" rows="2" maxlength="300" placeholder="Apni query likho… e.g. Kal se pakka padhunga"></textarea><button class="btn primary" id="rbSend" type="submit">Roast me 🔥</button></form>
     </div>
   </section>
@@ -123,7 +136,9 @@
 </div>
 <div id="toast" class="toast" role="status"></div>
 <script src="data.js"></script>
+<script src="extras.js"></script>
 <script src="roast.js"></script>
 <script src="app.js"></script>
+<script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
 </body>
 </html>
