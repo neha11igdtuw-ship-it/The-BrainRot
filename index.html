@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Brainrot — Comic Conversations</title>
+<meta name="description" content="Mood chuno, characters chuno, apni situation likho aur comic book ki tarah funny conversation padho aur suno.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bgshapes" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<header class="top">
+  <a class="logo" href="#mood"><span class="logo-b">The</span> <span class="logo-r">Brainrot</span> <small>🧠</small></a>
+  <a class="rblink" href="#roast">🔥 Roast Bot</a>
+  <ol class="stepper" id="stepper">
+    <li data-s="mood"><b>1</b><span>Mood</span></li>
+    <li data-s="chars"><b>2</b><span>Characters</span></li>
+    <li data-s="msg"><b>3</b><span>Message</span></li>
+    <li data-s="story"><b>4</b><span>Comic</span></li>
+  </ol>
+</header>
+
+<main id="stage">
+  <!-- STEP 1 -->
+  <section class="page" id="page-mood">
+    <div class="hero" id="hero">
+      <div class="hero-scene" id="scene">
+        <div class="orbit" aria-hidden="true"><span>💀</span><span>🗿</span><span>🧠</span><span>🔥</span><span>🌀</span><span>😎</span></div>
+        <div class="cube3d" id="cube" aria-hidden="true">
+          <div class="f f1">SIGMA</div><div class="f f2">RIZZ</div><div class="f f3">OHIO</div>
+          <div class="f f4">AURA</div><div class="f f5">NPC</div><div class="f f6">6-7</div>
+        </div>
+        <h1 class="hero-t"><span class="l1">THE</span><span class="l2" data-t="BRAINROT">BRAINROT</span></h1>
+      </div>
+      <p class="hero-s">Mood chuno. Characters bulao. Comic mein <b>cooked</b> ho jao. 💀</p>
+      <div class="hero-cta"><button class="btn primary big" type="button" id="heroStart">🚀 Shuru karo</button><a class="btn big" href="#roast">🔥 Roast Bot</a></div>
+      <div class="hero-hint">👆 Cube ko ghumao • kahin bhi tap karo = brainrot burst</div>
+    </div>
+    <div class="marq" aria-hidden="true"><div><span>SKIBIDI ✦ AURA +500 ✦ OHIO ✦ RIZZ ✦ NO CAP ✦ 6-7 ✦ COOKED ✦ SIGMA ✦ GYATT ✦ FANUM TAX ✦ </span><span>SKIBIDI ✦ AURA +500 ✦ OHIO ✦ RIZZ ✦ NO CAP ✦ 6-7 ✦ COOKED ✦ SIGMA ✦ GYATT ✦ FANUM TAX ✦ </span></div></div>
+    <div class="ph" id="moodlist"><span class="kicker">Step 1 of 3</span><h1>Aaj ka <em>mood</em> kya hai?</h1><p>Ek mood chuno, baaki flow apne aap aage badhega.</p></div>
+    <div id="daily" class="daily"></div>
+    <div id="moods" class="moods"></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="page" id="page-chars" hidden>
+    <div class="ph"><span class="kicker">Step 2 of 3</span><h1>Kaun kaun <em>aayega</em>?</h1><p id="charsSub"></p></div>
+    <div id="chars" class="chars"></div>
+    <div class="bar">
+      <button class="btn ghost" data-go="mood">← Back</button>
+      <button class="btn ghost" id="surprise">🎲 Surprise me</button>
+      <span class="count" id="count">0/4</span>
+      <button class="btn primary" id="toMsg" disabled>Next →</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="page" id="page-msg" hidden>
+    <div class="ph"><span class="kicker">Step 3 of 3</span><h1>Apni <em>situation</em> batao</h1><p>Optional hai. Khaali chhodo toh hum ek surprise story sunayenge.</p></div>
+    <div class="msgbox">
+      <div class="selchars" id="selchars"></div>
+      <div class="modes" id="modes"><button data-mode="story" class="on">📖 Story</button><button data-mode="roast">🔥 Roast Battle</button></div>
+      <div class="rot"><label>🧠 Rot level: <b id="rotName">Medium</b></label><input type="range" id="rot" min="0" max="2" value="1" step="1"><div class="rotlab"><span>Mild</span><span>Medium</span><span>Cooked</span></div></div>
+      <textarea id="input" rows="3" maxlength="140" placeholder="Apni situation type karo… e.g. Mera friend har baar late aata hai"></textarea>
+      <div class="chips" id="chips"></div>
+      <div class="bar">
+        <button class="btn ghost" data-go="chars">← Back</button>
+        <button class="btn primary big" id="start">📖 Comic shuru karo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROAST BOT -->
+  <section class="page" id="page-roast" hidden>
+    <div class="ph"><span class="kicker">AI Roast Bot</span><h1>Query daalo, <em>roast</em> lo 🔥</h1><p>Jo bhi likhoge, bot usi pe tumhe roast karega. Sirf mazaak ke liye.</p></div>
+    <div class="rb">
+      <div class="rb-personas" id="rbPersonas"></div>
+      <div class="rb-top">
+        <div class="rot"><label>🧠 Roast level: <b id="rbLevelName">Medium</b></label><input type="range" id="rbLevel" min="0" max="2" value="1" step="1"></div>
+        <div class="rb-tools"><span class="rb-mode" id="rbMode">⚡ Offline</span><span class="rb-cnt">Roasts: <b id="rbCount">0</b></span><button class="btn small" id="rbCfg" type="button" aria-label="AI settings">⚙ AI</button><button class="btn small" id="rbClear" type="button">🗑 Reset</button></div>
+      </div>
+      <div class="rb-panel" id="rbPanel" hidden>
+        <p><b>Real AI mode (optional):</b> provider chuno aur apni API key daalo. Key sirf is browser ke localStorage mein rehti hai aur seedha usi provider ko jaati hai. Public site par kisi aur ki key mat daalo.</p>
+        <select id="rbProv" aria-label="AI provider"></select>
+        <input type="password" id="rbKey" placeholder="sk-ant-…" autocomplete="off" spellcheck="false">
+        <label class="rb-chk"><input type="checkbox" id="rbAi"> Real AI use karo</label>
+        <button class="btn small primary" id="rbSave" type="button">Save</button>
+      </div>
+      <div class="rb-log" id="rbLog" aria-live="polite"></div>
+      <div class="chips" id="rbChips"></div>
+      <form class="rb-form" id="rbForm"><textarea id="rbInput" rows="2" maxlength="300" placeholder="Apni query likho… e.g. Kal se pakka padhunga"></textarea><button class="btn primary" id="rbSend" type="submit">Roast me 🔥</button></form>
+    </div>
+  </section>
+
+  <!-- COMIC -->
+  <section class="page" id="page-story" hidden>
+    <div class="bookwrap">
+      <div class="book" id="book"></div>
+    </div>
+    <div class="ctrl">
+      <button class="btn round" id="prev" aria-label="Previous page">←</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn round" id="next" aria-label="Next page">→</button>
+    </div>
+    <div class="ctrl tools">
+      <button class="btn small" id="voice">🔊 Voice on</button>
+      <button class="btn small" id="replay">▶ Bolke sunao</button>
+            <button class="btn small" id="sfx">🎵 SFX on</button>
+      <button class="btn small" id="share">🔗 Share link</button>
+      <button class="btn small" id="card">🖼 Save card</button>
+      <button class="btn small" id="again">🔁 Nayi story</button>
+    </div>
+  </section>
+</main>
+
+<div class="curtain" id="curtain" aria-hidden="true">
+  <div class="cur-l"></div><div class="cur-r"></div>
+  <div class="cur-txt"><div id="curEmoji">🎬</div><h2 id="curLine"></h2></div>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script src="data.js"></script>
+<script src="roast.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
