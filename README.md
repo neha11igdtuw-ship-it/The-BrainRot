@@ -138,26 +138,7 @@ python3 -m http.server 8000
 
 Open <http://localhost:8000>. Use a local server rather than opening `index.html` directly, so everything loads correctly.
 
-## 🌍 Deploy on Render
-
-The repo includes a small dependency-free Node server ([`server.js`](server.js)) that serves the site and the `/api/roast` proxy, so your API key stays on the server.
-
-1. Push the repo to GitHub.
-2. On [Render](https://dashboard.render.com): **New + → Web Service** → connect this repo.
-3. Settings: Runtime **Node**, Build Command `echo "no build"`, Start Command `node server.js`, Instance **Free**.
-4. Add environment variables:
-
-| Variable | Example |
-|----------|---------|
-| `AI_PROVIDER` | `groq` (or `anthropic`, `openai`, `gemini`) |
-| `GROQ_API_KEY` | your key (use the variable matching the provider) |
-| `AI_MODEL` | optional model override |
-| `RATE_LIMIT_PER_MIN` | optional, default `15` |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | optional, strict shared rate limit |
-
-5. Deploy. Roast Bot switches to **🤖 Real AI** and **✨ AI Comic** appears.
-
-The repo also has a [`render.yaml`](render.yaml) blueprint. The free plan sleeps after about 15 minutes of inactivity, so the first visit can take up to a minute.
+ 
 
 **Local dev:** copy `.env.example` to `.env`, fill in a key, then run `npm start` (loads env from your shell: `set -a; . ./.env; set +a; npm start`).
 
